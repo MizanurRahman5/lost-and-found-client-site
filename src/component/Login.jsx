@@ -1,17 +1,18 @@
-import React, { useState, useContext } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import auth from "../firebase/firebase.init";
-import AuthContext from "../contex/AuthContex/AuthContex";
-import { Link } from "react-router-dom";
-
+import React, { useState, useContext } from 'react';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import auth from '../firebase/firebase.init';
+import AuthContext from '../contex/AuthContex/AuthContex';
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const [error, setError] = useState(null);
   const { setUser, setLoading } = useContext(AuthContext); // Access AuthContext
+  const navigate = useNavigate(); // To navigate after login
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +31,38 @@ const Login = () => {
         formData.password
       );
       setUser(userCredential.user); // Set the logged-in user in context
-      alert("Login successful!");
+      Swal.fire({
+        title: 'Success!',
+        text: 'Login successful!',
+        icon: 'success',
+        confirmButtonText: 'Okay',
+      }).then(() => {
+        navigate('/'); // Navigate to home page after login
+      });
     } catch (err) {
       setError(err.message); // Show error if login fails
     } finally {
       setLoading(false); // Stop loading
+    }
+  };
+
+  // Google login handler
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      setUser(user); // Set the logged-in user in context
+      Swal.fire({
+        title: 'Success!',
+        text: 'Google login successful!',
+        icon: 'success',
+        confirmButtonText: 'Okay',
+      }).then(() => {
+        navigate('/'); // Navigate to home page after Google login
+      });
+    } catch (err) {
+      setError(err.message); // Show error if Google login fails
     }
   };
 
@@ -91,12 +119,7 @@ const Login = () => {
         </div>
 
         <div className="flex justify-between items-center mb-6">
-          <Link
-            to="/forgot-password"
-            
-          >
-            Forgot password?
-          </Link>
+          <Link to="/forgot-password">Forgot password?</Link>
         </div>
 
         <button
@@ -109,6 +132,7 @@ const Login = () => {
         <div className="flex items-center justify-center mt-6">
           <button
             type="button"
+            onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             <span className="mr-2 text-red-500">G</span> Continue with Google
@@ -116,8 +140,8 @@ const Login = () => {
         </div>
 
         <p className="text-sm text-center text-gray-600 mt-4">
-          Don't have an account?{" "}
-          <Link to='/auth/register'>Register</Link>
+          Don't have an account?{' '}
+          <Link to="/auth/register">Register</Link>
         </p>
       </form>
     </div>

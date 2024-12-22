@@ -9,17 +9,50 @@ const Register = () => {
     email: "",
     photoUrl: "",
     password: "",
+    confirmPassword: "", // Added confirmPassword field
   });
   const { createUser, setUser, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [error, setError] = useState(""); // To store validation errors
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const validatePassword = () => {
+    const { password, confirmPassword } = formData;
+
+    // Password length check
+    if (password.length < 6) {
+      return "Password must be at least 6 characters long.";
+    }
+
+    // Password confirmation check
+    if (password !== confirmPassword) {
+      return "Passwords do not match.";
+    }
+
+    // Password strength check: must include upper, lower, number, and special character
+    const passwordStrength = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordStrength.test(password)) {
+      return "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+
+    return ""; // No validation errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate password before submitting
+    const validationError = validatePassword();
+    if (validationError) {
+      setError(validationError);
+      return; // Stop the form submission if validation fails
+    }
+
     try {
       setLoading(true);
       const userCredential = await createUser(formData.email, formData.password);
@@ -37,7 +70,7 @@ const Register = () => {
       navigate("/"); // Redirect to home page
     } catch (error) {
       console.error("Error creating user:", error.message);
-      alert(error.message); // Display error message
+      setError(error.message); // Set error message
     } finally {
       setLoading(false);
     }
@@ -107,7 +140,7 @@ const Register = () => {
           />
         </div>
 
-        <div className="mb-8">
+        <div className="mb-6">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
@@ -124,6 +157,26 @@ const Register = () => {
             className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
           />
         </div>
+
+        <div className="mb-8">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm your password"
+            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
+          />
+        </div>
+
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>} {/* Display error message */}
 
         <button
           type="submit"

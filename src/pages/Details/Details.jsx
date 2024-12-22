@@ -1,48 +1,79 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import AuthContext from "../../contex/AuthContex/AuthContex"; // Assuming you are using AuthContext for logged in user data
+import AuthContext from "../../contex/AuthContex/AuthContex"; // Assuming you are using AuthContext for logged-in user data
+import Swal from "sweetalert2";
 
 // Modal component to show detailed information and handle recovery form
 const Modal = ({ item, closeModal, user }) => {
   const [recoveredLocation, setRecoveredLocation] = useState("");
   const [recoveredDate, setRecoveredDate] = useState(new Date());
+  const [isRecovered, setIsRecovered] = useState(item?.isRecovered || false); // Set initial state based on item data
+
+  // Update isRecovered if the item state changes
+  useEffect(() => {
+    setIsRecovered(item?.isRecovered);
+  }, [item]);
 
   const handleSubmit = async () => {
+    if (isRecovered) {
+      Swal.fire({
+        icon: "error",
+        title: "Item Already Recovered",
+        text: "This item has already been marked as recovered. Thank you for your effort!",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+  
     const recoveredData = {
       recoveredLocation,
       recoveredDate,
-      recoveredPerson: {
-        email: user?.email,
-        name: user?.displayName,
-        image: user?.photoURL,
-      },
+      email: user?.email,
+      name: user?.displayName,
+      image: user?.photoURL,
       itemId: item._id,
     };
-
+  
     try {
-      // API call to send recovered information to server
-      const response = await fetch('http://localhost:5000/recover', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/recover", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(recoveredData),
       });
-
+  
       const result = await response.json();
       if (response.ok) {
-        console.log('Recovery data submitted successfully:', result);
-        // Close modal after successful submission
+        setIsRecovered(true); // Update state if recovery is successful
+        Swal.fire({
+          icon: "success",
+          title: "Recovery Submitted",
+          text: "Thank you for helping recover this item!",
+          confirmButtonColor: "#3085d6",
+        });
         closeModal();
       } else {
-        console.error('Error submitting recovery data:', result);
+        Swal.fire({
+          icon: "error",
+          title: "Submission Failed",
+          text: result.message || "There was an issue submitting your data.",
+          confirmButtonColor: "#3085d6",
+        });
       }
     } catch (error) {
-      console.error('Error submitting recovery data:', error);
+      console.error("Error submitting recovery data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Submission Error",
+        text: "An unexpected error occurred. Please try again later.",
+        confirmButtonColor: "#3085d6",
+      });
     }
   };
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -50,7 +81,6 @@ const Modal = ({ item, closeModal, user }) => {
         <h2 className="text-2xl font-semibold mb-4">{item.title}</h2>
 
         <div className="flex space-x-8">
-          {/* পোস্টের তথ্য */}
           <div className="w-1/2">
             <img
               src={item.thumbnail || "https://via.placeholder.com/400x200"}
@@ -60,14 +90,11 @@ const Modal = ({ item, closeModal, user }) => {
             <p className="mt-4 text-gray-600">{item.description}</p>
             <p className="mt-4 text-gray-500">Category: {item.category}</p>
             <p className="text-gray-500">Location: {item.location}</p>
-            <p className="text-gray-500">
-              Date Lost: {new Date(item.dateLost).toLocaleDateString()}
-            </p>
+            <p className="text-gray-500">Date Lost: {new Date(item.dateLost).toLocaleDateString()}</p>
             <p className="text-gray-500">Name: {item.name}</p>
             <p className="text-gray-500">Contact: {item.email}</p>
           </div>
 
-          {/* রিকভারি তথ্য */}
           <div className="w-1/2">
             <div className="mt-6">
               <label className="block mb-2">Recovered Location:</label>
@@ -149,6 +176,7 @@ const Modal = ({ item, closeModal, user }) => {
   );
 };
 
+// Details component to show item details and handle modal
 const Details = () => {
   const item = useLoaderData(); // Fetch the item details
   const [isModalOpen, setIsModalOpen] = useState(false);
