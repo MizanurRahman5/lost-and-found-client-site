@@ -1,9 +1,10 @@
 import React from 'react';
+import AddPost from '../../component/AddPost';
 
 const AddItems = () => {
     return (
         <div>
-            comming sooooo....... add item
+            <AddPost/>
         </div>
     );
 };

@@ -8,6 +8,9 @@ import LostAndFound from "../pages/LostAndFound/LostAndFound";
 import MyItems from "../pages/MyItems/MyItems";
 import AllRecovered from "../pages/AllRecovered/AllRecovered";
 import AddItems from "../pages/AddItems/AddItems";
+import Details from "../pages/Details/Details";
+import UpdateItems from "../pages/UpdateItems/UpdateItems";
+import PrivateRoute from "../privateRout/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +22,9 @@ const router = createBrowserRouter([
         element: <Home /> 
       },
       {
-       path:'allItems',
-       element:<LostAndFound/>
+        path:'allItems',
+        element:<LostAndFound/>,
+        loader:() =>fetch('http://localhost:5000/lost')
       },
       {
         path:'myItems',
@@ -31,8 +35,20 @@ const router = createBrowserRouter([
         element:<AddItems/>
       },
       {
+          path: "/updateItems/:id",
+          element: <UpdateItems />,
+      },
+      {
         path:'allRecovered',
         element:<AllRecovered/>
+      },
+      {
+        path:'see-details/:id',
+        element:<PrivateRoute><Details/></PrivateRoute>,
+        loader: async ({ params }) => {
+          const response = await fetch(`http://localhost:5000/see-details/${params.id}`);
+          return response.json();  // Assuming the response is in JSON format
+        }
       },
       {
         path: "auth", 
