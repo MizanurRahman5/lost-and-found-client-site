@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.success-marquee {
+    display: flex;
+    animation: marquee 20s linear infinite;
+  }
+  
+  .success-marquee > div {
+    margin-right: 2rem;
+    flex-shrink: 0;
+  }
+  
+  .success-marquee {
+    display: flex;
+    animation: marquee 25s linear infinite;
+  }
+  
+  .success-marquee {
+    display: flex;
+    animation: marquee 25s linear infinite;
+  }
+  
+  .success-marquee > div {
+    margin-right: 2rem;
+    flex-shrink: 0;
+  }
+  
+  @keyframes marquee {
+    0% {
+      transform: translateX(0); 
+    }
+    100% {
+      transform: translateX(-100%); 
+    }
+  }
+  
+  
+  
+  
+  
+
+  
