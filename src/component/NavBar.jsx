@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import AuthContext from "../contex/AuthContex/AuthContex";
-
+import axios from "axios"; // Make sure axios is imported
 
 const NavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -12,9 +12,19 @@ const NavBar = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
-  const handleLogout = () => {
-    setUser(null); // Clear the user state
-    alert("You have logged out!");
+  const handleLogout = async () => {
+    try {
+      // Clear JWT token from cookies on the client side
+      await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
+
+      // Clear user state in AuthContext
+      setUser(null);
+
+      // Optionally show a message
+      alert("You have logged out!");
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (
@@ -30,14 +40,12 @@ const NavBar = () => {
           <NavLink
             to="/"
             className="text-white hover:text-gray-300"
-            
           >
             Home
           </NavLink>
           <NavLink
             to="/allItems"
             className="text-white hover:text-gray-300"
-            
           >
             Lost & Found
           </NavLink>

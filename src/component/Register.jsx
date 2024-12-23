@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../contex/AuthContex/AuthContex";
-import { updateProfile } from "firebase/auth"; // Import updateProfile
+import { updateProfile } from "firebase/auth";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,12 +10,12 @@ const Register = () => {
     email: "",
     photoUrl: "",
     password: "",
-    confirmPassword: "", // Added confirmPassword field
+    confirmPassword: "",
   });
   const { createUser, setUser, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [error, setError] = useState(""); // To store validation errors
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,33 +25,29 @@ const Register = () => {
   const validatePassword = () => {
     const { password, confirmPassword } = formData;
 
-    // Password length check
     if (password.length < 6) {
       return "Password must be at least 6 characters long.";
     }
 
-    // Password confirmation check
     if (password !== confirmPassword) {
       return "Passwords do not match.";
     }
 
-    // Password strength check: must include upper, lower, number, and special character
     const passwordStrength = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     if (!passwordStrength.test(password)) {
       return "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
 
-    return ""; // No validation errors
+    return "";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password before submitting
     const validationError = validatePassword();
     if (validationError) {
       setError(validationError);
-      return; // Stop the form submission if validation fails
+      return;
     }
 
     try {
@@ -58,7 +55,6 @@ const Register = () => {
       const userCredential = await createUser(formData.email, formData.password);
       const user = userCredential.user;
 
-      // Update profile with name and photo URL
       if (formData.name || formData.photoUrl) {
         await updateProfile(user, {
           displayName: formData.name,
@@ -66,132 +62,106 @@ const Register = () => {
         });
       }
 
-      setUser(user); // Update user in context
-      navigate("/"); // Redirect to home page
+      setUser(user);
+
+      Swal.fire({
+        title: "Registration Successful!",
+        text: "You have successfully created an account.",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        navigate("/");
+      });
     } catch (error) {
       console.error("Error creating user:", error.message);
-      setError(error.message); // Set error message
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form
-        className="w-full max-w-sm bg-white p-8 rounded-lg shadow-xl"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-3xl font-semibold mb-8 text-center text-gray-800">
-          Join the community
-        </h2>
-
-        <div className="mb-6">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your name"
-            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
-          />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 lg:p-12">
+      <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden w-full lg:w-3/4">
+        {/* Left Side - Card Section */}
+        <div className="relative lg:w-1/2 bg-gray-100 flex items-center justify-center p-8">
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg w-full">
+            <img
+              className="w-full max-h-[500px] object-cover"
+              src="https://c4.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto/static_images/signup_static_image"
+              alt="Sample Product"
+            />
+          </div>
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Your email"
-            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
-          />
+        {/* Right Side - Registration Form */}
+        <div className="lg:w-1/2 p-8 lg:p-12">
+          <h2 className="text-3xl font-bold mb-6 text-center">Join the community</h2>
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="url"
+              name="photoUrl"
+              placeholder="Photo URL (optional)"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={formData.photoUrl}
+              onChange={handleChange}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                error ? "border-red-500" : ""
+              }`}
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition"
+            >
+              Create Account
+            </button>
+          </form>
+          <div className="text-center mt-4">
+            <p>
+              Already have an account?{" "}
+              <Link to="/auth/login" className="text-blue-600 hover:underline">
+                Login
+              </Link>
+            </p>
+          </div>
         </div>
-
-        <div className="mb-6">
-          <label
-            htmlFor="photoUrl"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Photo URL (optional)
-          </label>
-          <input
-            type="text"
-            id="photoUrl"
-            name="photoUrl"
-            value={formData.photoUrl}
-            onChange={handleChange}
-            placeholder="https://example.com/photo.jpg"
-            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Your password"
-            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
-          />
-        </div>
-
-        <div className="mb-8">
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm your password"
-            className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
-          />
-        </div>
-
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>} {/* Display error message */}
-
-        <button
-          type="submit"
-          className="w-full bg-pink-500 text-white py-3 px-6 rounded-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-        >
-          Create Account
-        </button>
-
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Already have an account?{" "}
-          <Link to="/auth/login" className="text-pink-500 hover:underline">
-            Login
-          </Link>
-        </p>
-      </form>
+      </div>
     </div>
   );
 };
