@@ -84,11 +84,11 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 lg:p-12">
       <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden w-full lg:w-3/4">
         {/* Left Side - Card Section */}
-        <div className="relative lg:w-1/2 bg-gray-100 flex items-center justify-center p-8">
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg w-full">
+        <div className="relative lg:w-1/2 bg-white flex items-center justify-center ">
+          <div className="bg-white rounded-lg overflow-hidden w-full">
             <img
-              className="w-full max-h-[500px] object-cover"
-              src="https://c4.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto/static_images/signup_static_image"
+              className="w-full max-h-[600px] object-cover"
+              src="https://static.vecteezy.com/system/resources/previews/003/689/228/non_2x/online-registration-or-sign-up-login-for-account-on-smartphone-app-user-interface-with-secure-password-mobile-application-for-ui-web-banner-access-cartoon-people-illustration-vector.jpg"
               alt="Sample Product"
             />
           </div>

@@ -28,19 +28,19 @@ const router = createBrowserRouter([
       },
       {
         path:'myItems',
-        element:<MyItems/>
+        element:<PrivateRoute><MyItems/></PrivateRoute>
       },
       {
         path:'addItems',
-        element:<AddItems/>
+        element:<PrivateRoute><AddItems/></PrivateRoute>
       },
       {
           path: "/updateItems/:id",
-          element: <UpdateItems />,
+          element: <PrivateRoute><UpdateItems /></PrivateRoute>,
       },
       {
         path:'allRecovered',
-        element:<AllRecovered/>
+        element:<PrivateRoute><AllRecovered/></PrivateRoute>
       },
       {
         path: 'see-details/:id',

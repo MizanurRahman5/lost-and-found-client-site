@@ -14,10 +14,9 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  
   useEffect(() => {
     // Use browserSessionPersistence if you want session-only persistence
-    setPersistence(auth, browserLocalPersistence)  // or use browserSessionPersistence
+    setPersistence(auth, browserSessionPersistence)  // Switch to browserLocalPersistence if needed
       .then(() => {
         console.log("Persistence set successfully");
       })

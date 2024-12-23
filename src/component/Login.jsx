@@ -4,6 +4,7 @@ import auth from '../firebase/firebase.init';
 import AuthContext from '../contex/AuthContex/AuthContex';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import img from '../assets/rb_7962.png'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -88,11 +89,11 @@ const Login = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 lg:p-12">
       <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden w-full lg:w-3/4">
         {/* Left Side - Card Section */}
-        <div className="relative lg:w-1/2 bg-gray-100 flex items-center justify-center p-8">
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg w-full">
+        <div className="relative lg:w-1/2 bg-white flex items-center justify-center p-8">
+          <div className="bg-white rounded-lg overflow-hidden w-full">
             <img
               className="w-full max-h-[500px] object-cover"
-              src="https://source.unsplash.com/featured/?technology"
+              src="https://img.freepik.com/free-vector/computer-login-concept-illustration_114360-7962.jpg?t=st=1734974324~exp=1734977924~hmac=b9657096d89c4aa1c2f952ec771185327f2fedf09d60152b7d05afbd29add7f7&w=826"
               alt="Login Illustration"
             />
           </div>
