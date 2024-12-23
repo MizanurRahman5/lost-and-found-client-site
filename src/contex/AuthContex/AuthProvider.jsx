@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // Set persistence when component mounts
+  
   useEffect(() => {
     // Use browserSessionPersistence if you want session-only persistence
     setPersistence(auth, browserLocalPersistence)  // or use browserSessionPersistence
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
     // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser); // Update user state on auth state change
+        setUser(currentUser); 
 
         // If user is logged in, send JWT request to backend
         const user = { email: currentUser.email };

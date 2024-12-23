@@ -21,11 +21,7 @@ const MyItems = () => {
     }
   }, [user]);
 
-  const handleUpdate = (id) => {
-    // Handle update logic here
-    console.log("Update item with ID:", id);
-  };
-
+  
   const handleDelete = (id) => {
     fetch(`http://localhost:5000/lost/${id}`, { method: "DELETE" })
       .then((res) => res.json())
