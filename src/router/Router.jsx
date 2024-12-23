@@ -43,13 +43,18 @@ const router = createBrowserRouter([
         element:<AllRecovered/>
       },
       {
-        path:'see-details/:id',
-        element:<PrivateRoute><Details/></PrivateRoute>,
+        path: 'see-details/:id',
+        element: (
+          <PrivateRoute>
+            <Details />
+          </PrivateRoute>
+        ),
         loader: async ({ params }) => {
           const response = await fetch(`http://localhost:5000/see-details/${params.id}`);
-          return response.json();  // Assuming the response is in JSON format
-        }
+          return response.json();
+        },
       },
+      
       {
         path: "auth", 
         element: <Auth />,

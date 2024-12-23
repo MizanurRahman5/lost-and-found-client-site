@@ -1,21 +1,50 @@
-import React from 'react';
-import { useLoaderData, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useLoaderData, Link } from "react-router-dom";
 
 const LostAndFound = () => {
-  const items = useLoaderData();  // Loader থেকে ডেটা পাওয়া যাবে
+  const items = useLoaderData(); // Fetch the items
+  const [searchQuery, setSearchQuery] = useState(""); // State to track the search input
+  const [filteredItems, setFilteredItems] = useState(items); // Filtered items state
+
+  // Handle search input changes
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) || // Filter by title
+        item.location.toLowerCase().includes(query) // Filter by location
+    );
+    setFilteredItems(filtered);
+  };
 
   if (!items) {
-    return <div>Loading...</div>;  // ডেটা লোড হলে দেখাবে
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Latest Lost & Found Items</h2>
-      {items.length === 0 ? (
-        <p className="text-center text-gray-500">No items found</p> // Show message if no items are found
+    <div className="container mt-20 mx-auto p-6">
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        Lost & Found Items
+      </h2>
+
+      {/* Search Input */}
+      <div className="mb-6">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Search by title or location..."
+          className="w-full p-3 border border-gray-300 rounded-md"
+        />
+      </div>
+
+      {filteredItems.length === 0 ? (
+        <p className="text-center text-gray-500">No items found</p> // Show message if no items match
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item, index) => ( // Use items here instead of lostItems
+          {filteredItems.map((item, index) => (
             <div
               key={index}
               className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
