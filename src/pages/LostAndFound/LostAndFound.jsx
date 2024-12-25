@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useLoaderData, Link } from "react-router-dom";
 
 const LostAndFound = () => {
   const items = useLoaderData(); // Fetch the items
   const [searchQuery, setSearchQuery] = useState(""); // State to track the search input
-  const [filteredItems, setFilteredItems] = useState(items); // Filtered items state
+
+  // Memoize the filtered items to optimize performance
+  const filteredItems = useMemo(() => {
+    return items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Filter by title
+        item.location.toLowerCase().includes(searchQuery.toLowerCase()) // Filter by location
+    );
+  }, [items, searchQuery]);
 
   // Handle search input changes
   const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const filtered = items.filter(
-      (item) =>
-        item.title.toLowerCase().includes(query) || // Filter by title
-        item.location.toLowerCase().includes(query) // Filter by location
-    );
-    setFilteredItems(filtered);
+    setSearchQuery(e.target.value);
   };
 
   if (!items) {
@@ -44,9 +44,9 @@ const LostAndFound = () => {
         <p className="text-center text-gray-500">No items found</p> // Show message if no items match
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item, index) => (
+          {filteredItems.map((item) => (
             <div
-              key={index}
+              key={item._id} // Use _id as key for better performance
               className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
               <div className="relative">

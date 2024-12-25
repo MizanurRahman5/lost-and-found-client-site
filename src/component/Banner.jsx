@@ -8,19 +8,22 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 const Banner = () => {
   const slides = [
     {
-      image: "https://media.istockphoto.com/id/1129543842/photo/electronic-circuit-and-futuristic-technology-concept.jpg?s=612x612&w=0&k=20&c=kak1vN4GSZCehO5p6MsWfLBUClv21PC6woFF73uua0g=",
-      title: "Alien Horde: Filming Complete!",
-      subtitle: "Help Fund the Final Edits",
+      id : 1,
+      image: "https://img.freepik.com/free-photo/young-child-playing-with-microscope_23-2147770370.jpg?ga=GA1.1.548603604.1723527155&semt=ais_hybrid",
+      title: "Lost Item Found",
+      subtitle: "Help us reunite lost items with their owners!",
     },
     {
-      image: "https://media.istockphoto.com/id/1163243581/photo/kpi-key-performance-indicator-for-business-concept.jpg?s=612x612&w=0&k=20&c=LAI6F4mWup3edbMnGKa3h5hNC42eJtN6Yf4FEIJpaH4=",
-      title: "Crowdfund Your Next Big Idea",
-      subtitle: "Join millions to make dreams come true",
+      id : 2,
+      image: "https://img.freepik.com/premium-photo/man-headphones-engages-educational-programs-audio-tours-using-map-understan_470400-3461.jpg?ga=GA1.1.548603604.1723527155&semt=ais_hybrid",
+      title: "Found Something?",
+      subtitle: "Browse through lost items and report your found items.",
     },
     {
-      image: "https://ibles-content.tinkercad.com/static/tinkercad/marketing/home/feature-video-poster.jpg?width=600&auto=webp",
-      title: "Explore Tech Innovations",
-      subtitle: "Discover the future, today",
+      id : 3,
+      image: "https://img.freepik.com/free-photo/asian-woman-tourist-wearing-face-mask-coronavirus-flu-virus-travel-concept_1150-45023.jpg?ga=GA1.1.548603604.1723527155&semt=ais_hybrid",
+      title: "Community Support",
+      subtitle: "Join the community to make a difference.",
     },
   ];
 
@@ -38,8 +41,8 @@ const Banner = () => {
         loop
         className="mySwiper"
       >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id}>
             <div
               className="relative"
               style={{
@@ -50,7 +53,7 @@ const Banner = () => {
               }}
             >
               <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white">
-                <h1 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                <h1 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
                   {slide.title}
                 </h1>
                 <p className="text-lg sm:text-base">{slide.subtitle}</p>

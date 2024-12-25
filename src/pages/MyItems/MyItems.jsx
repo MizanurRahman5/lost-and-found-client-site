@@ -21,7 +21,6 @@ const MyItems = () => {
     }
   }, [user]);
 
-  
   const handleDelete = (id) => {
     fetch(`http://localhost:5000/lost/${id}`, { method: "DELETE" })
       .then((res) => res.json())
@@ -42,18 +41,10 @@ const MyItems = () => {
         <table className="min-w-full table-auto border-collapse">
           <thead>
             <tr className="bg-gray-200 border-b">
-              <th className="px-6 py-4 text-left text-sm font-semibold">
-                Title
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">
-                Description
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">
-                Date Lost
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">
-                Actions
-              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold">Title</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold">Description</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold">Date Lost</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -61,7 +52,9 @@ const MyItems = () => {
               <tr key={item._id} className="border-b hover:bg-gray-100">
                 <td className="px-6 py-4 text-sm">{item.title}</td>
                 <td className="px-6 py-4 text-sm">{item.description}</td>
-                <td className="px-6 py-4 text-sm">{item.dateLost}</td>
+                <td className="px-6 py-4 text-sm">
+                  {new Date(item.dateLost).toLocaleDateString()} {/* Format the date */}
+                </td>
                 <td className="px-6 py-4">
                   <Link
                     to={`/updateItems/${item._id}`} // Use the item's ID here
@@ -69,7 +62,6 @@ const MyItems = () => {
                   >
                     Update
                   </Link>
-
                   <button
                     onClick={() => handleDelete(item._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-md text-sm"

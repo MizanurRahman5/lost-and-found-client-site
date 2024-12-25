@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../contex/AuthContex/AuthContex";
 import axios from "axios";
@@ -9,6 +9,7 @@ const NavBar = () => {
   const { user, setUser } = useContext(AuthContext);
   const isAuthenticated = !!user;
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -32,7 +33,7 @@ const NavBar = () => {
         showConfirmButton: false,
       });
 
-      // Redirect to login page after logout
+      closeDropdown(); // Close dropdown on logout
       navigate("/auth/login");
     } catch (error) {
       console.error("Error during logout:", error);
@@ -46,7 +47,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (!event.target.closest(".dropdown")) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         closeDropdown();
       }
     };
@@ -61,25 +62,25 @@ const NavBar = () => {
   }, [isDropdownOpen]);
 
   return (
-    <nav className="bg-blue-600 shadow-lg fixed z-50 top-0 w-full">
+    <nav className="bg-[#0D1B2A] shadow-lg fixed z-50 top-0 w-full">
       <div className="container mx-auto p-4 flex justify-between items-center">
         {/* Logo */}
-        <div className="text-white font-bold text-xl">
+        <div className="text-pink-100 font-bold text-xl">
           <Link to="/">WhereIsIt</Link>
         </div>
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-6">
-          <NavLink to="/" className="text-white hover:text-gray-300">
+          <NavLink to="/" className="text-pink-100 hover:text-pink-300">
             Home
           </NavLink>
-          <NavLink to="/allItems" className="text-white hover:text-gray-300">
+          <NavLink to="/allItems" className="text-pink-100 hover:text-pink-300">
             Lost & Found
           </NavLink>
 
           {/* Conditional Login/Logout */}
           {isAuthenticated ? (
-            <div className="relative dropdown">
+            <div className="relative dropdown" ref={dropdownRef}>
               {/* Profile Picture */}
               <img
                 src={user?.photoURL || "/default-profile.png"}
@@ -90,7 +91,7 @@ const NavBar = () => {
 
               {/* Dropdown */}
               <div
-                className={`absolute right-0 mt-2 bg-white text-black p-2 rounded shadow-lg w-48 transition-opacity duration-300 ${
+                className={`absolute right-0 mt-2 bg-white text-black p-2 rounded shadow-lg w-48 transition-all duration-300 ease-in-out ${
                   isDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
                 }`}
               >
@@ -131,10 +132,10 @@ const NavBar = () => {
             </div>
           ) : (
             <>
-              <NavLink to="/auth/login" className="text-white hover:text-gray-300">
+              <NavLink to="/auth/login" className="text-pink-100 hover:text-pink-300">
                 Login
               </NavLink>
-              <NavLink to="/auth/register" className="text-white hover:text-gray-300">
+              <NavLink to="/auth/register" className="text-pink-100 hover:text-pink-300">
                 Register
               </NavLink>
             </>

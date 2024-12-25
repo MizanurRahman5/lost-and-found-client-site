@@ -3,6 +3,7 @@ import React from "react";
 const Blog = () => {
   const posts = [
     {
+      id: 1,
       title: "How Lost and Found Platforms Help Reunite People",
       date: "December 22, 2024",
       author: "Misti",
@@ -12,6 +13,7 @@ const Blog = () => {
         "https://images.pexels.com/photos/12786869/pexels-photo-12786869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     },
     {
+      id: 2,
       title: "Tips for Creating an Effective Lost and Found System",
       date: "December 18, 2024",
       author: "Misti",
@@ -21,6 +23,7 @@ const Blog = () => {
         "https://images.unsplash.com/photo-1523623169910-dad45c0fd21c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
+      id: 3,
       title: "How Technology is Revolutionizing Lost and Found Services",
       date: "December 15, 2024",
       author: "Misti",
@@ -30,6 +33,7 @@ const Blog = () => {
         "https://media.istockphoto.com/id/1549561564/photo/asian-older-man-finding-something-that-he-forgot-it-in-drawers.webp?a=1&b=1&s=612x612&w=0&k=20&c=J-Fn2Gbfuv2OcPM76YvitWMqKJiZocPMmBtzseLGOuU=",
     },
     {
+      id: 4,
       title: "Best Practices for Managing Lost and Found Items in Public Spaces",
       date: "December 12, 2024",
       author: "Misti",
@@ -39,6 +43,7 @@ const Blog = () => {
         "https://media.istockphoto.com/id/1550901370/photo/magnifying-success-powerful-red-wooden-businessman-leading-way-human-resource-empowering.webp?a=1&b=1&s=612x612&w=0&k=20&c=4VoZ2yR26RG9uHTl9VM0_BhuwfoNakW2c0C8VHiMBBY=",
     },
     {
+      id: 5,
       title: "Legal Aspects of Lost and Found: What You Need to Know",
       date: "December 8, 2024",
       author: "Misti",
@@ -48,6 +53,7 @@ const Blog = () => {
         "https://media.istockphoto.com/id/1972284700/photo/digital-search-icon-on-future-tech-background-search-engine-evolution-futuristic-search-icon.webp?a=1&b=1&s=612x612&w=0&k=20&c=xUurRaqulosQPS5cgJvWPY4eIp1Nt1tdpp2KApNyZV0=",
     },
     {
+      id: 6,
       title: "How to Build a Community-Driven Lost and Found Platform",
       date: "December 5, 2024",
       author: "Misti",
@@ -64,9 +70,9 @@ const Blog = () => {
         Latest Lost and Found Blog Posts
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8">
-        {posts.map((post, index) => (
+        {posts.map((post) => (
           <div
-            key={index}
+            key={post.id}
             className="bg-white border rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out"
           >
             <img
