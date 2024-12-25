@@ -11,11 +11,13 @@ import AddItems from "../pages/AddItems/AddItems";
 import Details from "../pages/Details/Details";
 import UpdateItems from "../pages/UpdateItems/UpdateItems";
 import PrivateRoute from "../privateRout/PrivateRoute";
+import NotFound from "../component/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />, 
+    element: <MainLayout />,
+    errorElement:<NotFound/>, 
     children: [
       {
         path: "/",

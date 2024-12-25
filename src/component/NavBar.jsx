@@ -81,12 +81,14 @@ const NavBar = () => {
           {/* Conditional Login/Logout */}
           {isAuthenticated ? (
             <div className="relative dropdown" ref={dropdownRef}>
-              {/* Profile Picture */}
+              {/* Profile Picture with hover effect */}
               <img
                 src={user?.photoURL || "/default-profile.png"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={toggleDropdown}
+                title={user?.displayName || "User"}
+  
               />
 
               {/* Dropdown */}

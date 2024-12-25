@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../contex/AuthContex/AuthContex";
+import { Helmet } from "react-helmet";
 
 const UpdateItems = () => {
   const { id } = useParams(); // Getting the ID of the item to be updated
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   // State to store form data
   const [item, setItem] = useState({
     title: "",
@@ -14,8 +15,8 @@ const UpdateItems = () => {
     dateLost: "",
     location: "",
     image: "",
-    email: user?.email || "",
-    username: user?.displayName || "",
+    email: user?.email || "", // Prefilling the email if available
+    username: user?.displayName || "", // Prefilling the username if available
   });
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -28,7 +29,7 @@ const UpdateItems = () => {
           if (data) {
             setItem({
               ...data,
-              email: user?.email || data.email,  // Ensuring the email is pre-filled but read-only
+              email: user?.email || data.email, // Ensuring the email is pre-filled but read-only
               username: user?.displayName || data.username, // Ensuring the username is pre-filled but read-only
             });
           }
@@ -65,10 +66,16 @@ const UpdateItems = () => {
 
   return (
     <div className="p-4 mt-28 min-h-[600px]">
+      <Helmet>
+        <title>Update</title> {/* Dynamic title */}
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">Update Lost Item</h1>
       <form onSubmit={handleSubmit} className="max-w-xl mx-auto">
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700"
+          >
             Title
           </label>
           <input
@@ -83,7 +90,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700"
+          >
             Description
           </label>
           <textarea
@@ -97,7 +107,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="dateLost" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="dateLost"
+            className="block text-sm font-medium text-gray-700"
+          >
             Date Lost
           </label>
           <input
@@ -112,7 +125,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="location"
+            className="block text-sm font-medium text-gray-700"
+          >
             Location
           </label>
           <input
@@ -127,7 +143,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700"
+          >
             Image URL (Optional)
           </label>
           <input
@@ -141,7 +160,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             User Email
           </label>
           <input
@@ -155,7 +177,10 @@ const UpdateItems = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700"
+          >
             Username
           </label>
           <input
@@ -173,7 +198,9 @@ const UpdateItems = () => {
         </button>
       </form>
 
-      {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
+      {successMessage && (
+        <p className="text-green-600 mt-4">{successMessage}</p>
+      )}
     </div>
   );
 };

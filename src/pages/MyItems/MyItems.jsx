@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
+import { Helmet } from 'react-helmet';
 
 const MyItems = () => {
   const { user } = useContext(AuthContext);
@@ -52,10 +53,14 @@ const MyItems = () => {
 
   return (
     <Box sx={{ padding: 4, marginTop: 8, minHeight: "600px" }}>
+      <Helmet>
+        <title>My Items</title>  {/* Dynamic title */}
+        
+      </Helmet>
       <Typography variant="h4" component="h1" gutterBottom>
         My Lost Items
       </Typography>
-      {error && <Typography color="error">{error}</Typography>}
+      
       {lost.length > 0 ? (
         <TableContainer component={Paper} sx={{ maxHeight: 400, overflowX: "auto" }}>
           <Table stickyHeader>

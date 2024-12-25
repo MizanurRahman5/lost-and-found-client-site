@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useLoaderData, Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Framer Motion import
+import { Helmet } from 'react-helmet';
 
 const LostAndFound = () => {
   const items = useLoaderData(); // Fetch the items
@@ -26,6 +27,9 @@ const LostAndFound = () => {
 
   return (
     <div className="container mt-20 mx-auto p-6">
+      <Helmet>
+        <title>All Lost and Found</title> {/* Dynamic title */}
+      </Helmet>
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Lost & Found Items
       </h2>

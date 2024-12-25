@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../contex/AuthContex/AuthContex'; // Import context to get user info
 import { FaTh, FaTable } from 'react-icons/fa'; // Import icons from react-icons
+import { Helmet } from 'react-helmet';
 
 const AllRecoveries = () => {
   const { user } = useContext(AuthContext); // Get the logged-in user info
@@ -46,9 +47,12 @@ const AllRecoveries = () => {
 
   return (
     <div className="container mt-20 mx-auto p-6">
+      <Helmet>
+        <title>All Recover</title> {/* Dynamic title */}
+      </Helmet>
       <h2 className="text-2xl font-semibold mb-6">My Recoveries</h2>
 
-      {error && <p className="text-red-500">{error}</p>} {/* Display error if any */}
+       {/* Display error if any */}
 
       <button
         onClick={toggleLayout}

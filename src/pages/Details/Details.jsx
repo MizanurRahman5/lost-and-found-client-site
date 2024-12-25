@@ -4,13 +4,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AuthContext from "../../contex/AuthContex/AuthContex"; // Assuming you are using AuthContext for logged-in user data
 import Swal from "sweetalert2";
+import { Helmet } from 'react-helmet';
 
 // Modal component to show detailed information and handle recovery form
 const Modal = ({ item, closeModal, user }) => {
   const [recoveredLocation, setRecoveredLocation] = useState("");
   const [recoveredDate, setRecoveredDate] = useState(new Date());
   const [isRecovered, setIsRecovered] = useState(item?.isRecovered || false); // Set initial state based on item data
-
+console.log(item)
   // Update isRecovered if the item state changes
   useEffect(() => {
     setIsRecovered(item?.isRecovered);
@@ -26,7 +27,7 @@ const Modal = ({ item, closeModal, user }) => {
       });
       return;
     }
-  
+
     const recoveredData = {
       recoveredLocation,
       recoveredDate,
@@ -34,8 +35,9 @@ const Modal = ({ item, closeModal, user }) => {
       name: user?.displayName,
       image: user?.photoURL,
       itemId: item._id,
+     
     };
-  
+
     try {
       const response = await fetch("http://localhost:5000/recover", {
         method: "POST",
@@ -44,7 +46,7 @@ const Modal = ({ item, closeModal, user }) => {
         },
         body: JSON.stringify(recoveredData),
       });
-  
+
       const result = await response.json();
       if (response.ok) {
         setIsRecovered(true); // Update state if recovery is successful
@@ -73,7 +75,6 @@ const Modal = ({ item, closeModal, user }) => {
       });
     }
   };
-  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -196,38 +197,45 @@ const Details = () => {
 
   return (
     <div className="container mt-20 mx-auto p-6">
+      <Helmet>
+        <title>Details</title> {/* Dynamic title */}
+      </Helmet>
       <h2 className="text-2xl font-semibold mb-6">{item.title}</h2>
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <img
-          src={item.thumbnail || "https://via.placeholder.com/400x200"}
-          alt={item.title}
-          className="w-full h-48 object-cover rounded-t-lg"
-        />
-        <p className="mt-4 text-gray-600">{item.description}</p>
-        <p className="mt-4 text-gray-500">Category: {item.category}</p>
-        <p className="text-gray-500">Location: {item.location}</p>
-        <p className="text-gray-500">
-          Date Lost: {new Date(item.dateLost).toLocaleDateString()}
-        </p>
-        <p className="text-gray-500">Name: {item.name}</p>
-        <p className="text-gray-500">Contact: {item.email}</p>
+      <div className="bg-white p-6 rounded-lg shadow-lg flex flex-wrap">
+        <div className="w-full sm:w-1/2 p-4">
+          <img
+            src={item.thumbnail || "https://via.placeholder.com/400x200"}
+            alt={item.title}
+            className="w-full h-[500px] object-contain rounded-t-lg"
+          />
+        </div>
+        <div className="w-full sm:w-1/2 p-4">
+          <p className="mt-4 text-gray-600">{item.description}</p>
+          <p className="mt-4 text-gray-500">Category: {item.category}</p>
+          <p className="text-gray-500">Location: {item.location}</p>
+          <p className="text-gray-500">
+            Date Lost: {new Date(item.dateLost).toLocaleDateString()}
+          </p>
+          <p className="text-gray-500">Name: {item.name}</p>
+          <p className="text-gray-500">Contact: {item.email}</p>
 
-        {/* Conditional Button */}
-        {item.postType === "Lost" ? (
-          <button
-            onClick={handleButtonClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-          >
-            Found This!
-          </button>
-        ) : (
-          <button
-            onClick={handleButtonClick}
-            className="bg-green-500 text-white px-4 py-2 rounded-md mt-4"
-          >
-            This is Mine!
-          </button>
-        )}
+          {/* Conditional Button */}
+          {item.postType === "Lost" ? (
+            <button
+              onClick={handleButtonClick}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
+            >
+              Found This!
+            </button>
+          ) : (
+            <button
+              onClick={handleButtonClick}
+              className="bg-green-500 text-white px-4 py-2 rounded-md mt-4"
+            >
+              This is Mine!
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Modal */}
