@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useLoaderData, Link } from "react-router-dom";
+import { motion } from "framer-motion"; // Framer Motion import
 
 const LostAndFound = () => {
   const items = useLoaderData(); // Fetch the items
@@ -45,9 +46,12 @@ const LostAndFound = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item) => (
-            <div
+            <motion.div
               key={item._id} // Use _id as key for better performance
               className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              initial={{ x: 100, y: -100 }} // Initial state, moving from bottom-left
+              animate={{ x: 0, y: 0 }} // Animate to final position
+              transition={{ duration: 0.6 }}
             >
               <div className="relative">
                 <img
@@ -66,16 +70,20 @@ const LostAndFound = () => {
                 <p>Location: {item.location}</p>
                 <p>Date Lost: {new Date(item.dateLost).toLocaleDateString()}</p>
               </div>
-              <Link
-                to={`/see-details/${item._id}`} // Link to the item's detailed page
-                className="mt-4 inline-block text-center w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                View Details
-              </Link>
-            </div>
+              <div className="mt-4">
+                <Link
+                  to={`/see-details/${item._id}`} // Link to the item's detailed page
+                  className="inline-block bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                >
+                  View Details
+                </Link>
+              </div>
+            </motion.div>
           ))}
         </div>
       )}
+
+      
     </div>
   );
 };

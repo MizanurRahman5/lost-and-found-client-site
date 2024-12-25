@@ -2,81 +2,100 @@ import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../../contex/AuthContex/AuthContex";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
 
 const MyItems = () => {
   const { user } = useContext(AuthContext);
   const [lost, setLost] = useState([]);
-  const [error, setError] = useState(null); // Error state for handling errors
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (user?.email) {
-      axios.get(`http://localhost:5000/lost/${user.email}`, {
-        withCredentials: true,
-      })
-      .then(res => setLost(res.data))
-      .catch((error) => {
-        console.error("Error fetching lost items:", error);
-        setError("Failed to load lost items."); // Set error message
-      });
+      axios
+        .get(`http://localhost:5000/lost/${user.email}`, {
+          withCredentials: true,
+        })
+        .then((res) => setLost(res.data))
+        .catch((error) => {
+          console.error("Error fetching lost items:", error);
+          setError("Failed to load lost items.");
+        });
     }
   }, [user]);
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/lost/${id}`, { method: "DELETE" })
-      .then((res) => res.json())
-      .then(() => {
-        setLost(lost.filter((item) => item._id !== id));
-      })
-      .catch((error) => {
-        console.error("Error deleting item:", error);
-        setError("Failed to delete item.");
-      });
+    // SweetAlert confirmation
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/lost/${id}`, { method: "DELETE" })
+          .then((res) => res.json())
+          .then(() => {
+            setLost(lost.filter((item) => item._id !== id));
+            Swal.fire("Deleted!", "Your item has been deleted.", "success");
+          })
+          .catch((error) => {
+            console.error("Error deleting item:", error);
+            setError("Failed to delete item.");
+            Swal.fire("Error!", "Failed to delete the item.", "error");
+          });
+      }
+    });
   };
 
   return (
-    <div className="p-4 container mx-auto mt-28 min-h-[600px]">
-      <h1 className="text-2xl font-bold mb-4">My Lost Items</h1>
-      {error && <p className="text-red-500">{error}</p>} {/* Show error message if exists */}
+    <Box sx={{ padding: 4, marginTop: 8, minHeight: "600px" }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        My Lost Items
+      </Typography>
+      {error && <Typography color="error">{error}</Typography>}
       {lost.length > 0 ? (
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-200 border-b">
-              <th className="px-6 py-4 text-left text-sm font-semibold">Title</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">Description</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">Date Lost</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lost.map((item) => (
-              <tr key={item._id} className="border-b hover:bg-gray-100">
-                <td className="px-6 py-4 text-sm">{item.title}</td>
-                <td className="px-6 py-4 text-sm">{item.description}</td>
-                <td className="px-6 py-4 text-sm">
-                  {new Date(item.dateLost).toLocaleDateString()} {/* Format the date */}
-                </td>
-                <td className="px-6 py-4">
-                  <Link
-                    to={`/updateItems/${item._id}`} // Use the item's ID here
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 text-sm"
-                  >
-                    Update
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md text-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TableContainer component={Paper} sx={{ maxHeight: 400, overflowX: "auto" }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Date Lost</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {lost.map((item) => (
+                <TableRow hover key={item._id}>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell>{new Date(item.dateLost).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    <Link to={`/updateItems/${item._id}`}>
+                      <Button variant="contained" color="primary" sx={{ marginRight: 2 }}>
+                        Update
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       ) : (
-        <p>No lost items found.</p>
+        <Typography>No lost items found.</Typography>
       )}
-    </div>
+    </Box>
   );
 };
 
