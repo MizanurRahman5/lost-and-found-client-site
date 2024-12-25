@@ -16,19 +16,21 @@ const AllRecoveries = () => {
       if (user?.email) {
         setLoading(true); // Set loading to true before fetching data
         try {
-          // Fetch the recovery data using the logged-in user's email
-          const response = await fetch(`http://localhost:5000/recover/${user.email}`);
-          const data = await response.json();
+          // Simulate a 1-second loading delay
+          setTimeout(async () => {
+            const response = await fetch(`http://localhost:5000/recover/${user.email}`);
+            const data = await response.json();
 
-          if (response.ok) {
-            setRecoveries(data); // Set the recovery data
-          } else {
-            setError(data.message || 'Something went wrong'); // Set error message
-          }
+            if (response.ok) {
+              setRecoveries(data); // Set the recovery data
+            } else {
+              setError(data.message || 'Something went wrong'); // Set error message
+            }
+            setLoading(false); // Set loading to false after fetching data
+          }, 1000); // 1 second delay
         } catch (error) {
           setError('Failed to fetch recoveries'); // Catch any fetch error
-        } finally {
-          setLoading(false); // Set loading to false once data is fetched
+          setLoading(false); // Stop loading if an error occurs
         }
       }
     };
@@ -52,7 +54,7 @@ const AllRecoveries = () => {
       </Helmet>
       <h2 className="text-2xl font-semibold mb-6">My Recoveries</h2>
 
-       {/* Display error if any */}
+      
 
       <button
         onClick={toggleLayout}

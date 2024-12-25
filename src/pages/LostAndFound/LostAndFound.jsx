@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useLoaderData, Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Framer Motion import
 import { Helmet } from 'react-helmet';
+import { TailSpin } from "react-loader-spinner"; // Importing loader from react-loader-spinner
 
 const LostAndFound = () => {
   const items = useLoaderData(); // Fetch the items
   const [searchQuery, setSearchQuery] = useState(""); // State to track the search input
+  const [loading, setLoading] = useState(true); // Loading state
 
   // Memoize the filtered items to optimize performance
   const filteredItems = useMemo(() => {
@@ -21,8 +23,25 @@ const LostAndFound = () => {
     setSearchQuery(e.target.value);
   };
 
+  useEffect(() => {
+    // Simulate a 1-second loading delay before showing the data
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <TailSpin color="gray" height={50} width={50} />
+      </div>
+    ); // Show loader while loading
+  }
+
   if (!items) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Show message if items are not available
   }
 
   return (
@@ -86,8 +105,6 @@ const LostAndFound = () => {
           ))}
         </div>
       )}
-
-      
     </div>
   );
 };

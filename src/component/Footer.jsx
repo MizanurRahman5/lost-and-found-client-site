@@ -104,7 +104,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <p className="text-xs text-center mt-6">
-          © 2024 Indiegogo, Inc. All Rights Reserved
+          © 2024 Wherisit, Inc. All Rights Reserved
         </p>
       </div>
     </footer>

@@ -69,7 +69,7 @@ const UpdateItems = () => {
       <Helmet>
         <title>Update</title> {/* Dynamic title */}
       </Helmet>
-      <h1 className="text-2xl font-bold mb-4">Update Lost Item</h1>
+      <h1 className="text-2xl text-center font-bold mb-4">Update Lost Item</h1>
       <form onSubmit={handleSubmit} className="max-w-xl mx-auto">
         <div className="mb-4">
           <label

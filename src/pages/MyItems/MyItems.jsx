@@ -10,18 +10,25 @@ const MyItems = () => {
   const { user } = useContext(AuthContext);
   const [lost, setLost] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get(`http://localhost:5000/lost/${user.email}`, {
-          withCredentials: true,
-        })
-        .then((res) => setLost(res.data))
-        .catch((error) => {
-          console.error("Error fetching lost items:", error);
-          setError("Failed to load lost items.");
-        });
+      setTimeout(() => {  // Simulate 1-second loading delay
+        axios
+          .get(`http://localhost:5000/lost/${user.email}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            setLost(res.data);
+            setLoading(false); // Set loading to false after fetching data
+          })
+          .catch((error) => {
+            console.error("Error fetching lost items:", error);
+            setError("Failed to load lost items.");
+            setLoading(false); // Set loading to false even if there's an error
+          });
+      }, 1000); // Simulate a 1-second delay
     }
   }, [user]);
 
@@ -51,11 +58,19 @@ const MyItems = () => {
     });
   };
 
+  // Loading State
+  if (loading) {
+    return (
+      <Box sx={{ padding: 4, marginTop: 8, minHeight: "600px", textAlign: "center" }}>
+        <Typography variant="h5">Loading...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ padding: 4, marginTop: 8, minHeight: "600px" }}>
       <Helmet>
-        <title>My Items</title>  {/* Dynamic title */}
-        
+        <title>My Items</title> {/* Dynamic title */}
       </Helmet>
       <Typography variant="h4" component="h1" gutterBottom>
         My Lost Items
