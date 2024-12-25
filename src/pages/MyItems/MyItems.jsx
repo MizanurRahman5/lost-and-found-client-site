@@ -16,7 +16,7 @@ const MyItems = () => {
     if (user?.email) {
       setTimeout(() => {  // Simulate 1-second loading delay
         axios
-          .get(`http://localhost:5000/lost/${user.email}`, {
+          .get(`https://lost-and-found-server-ecru.vercel.app/lost/${user.email}`, {
             withCredentials: true,
           })
           .then((res) => {
@@ -43,7 +43,7 @@ const MyItems = () => {
       cancelButtonText: "No, keep it",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/lost/${id}`, { method: "DELETE" })
+        fetch(`https://lost-and-found-server-ecru.vercel.app/lost/${id}`, { method: "DELETE" })
           .then((res) => res.json())
           .then(() => {
             setLost(lost.filter((item) => item._id !== id));

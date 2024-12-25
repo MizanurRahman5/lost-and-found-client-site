@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
         // If user is logged in, send JWT request to backend
         const user = { email: currentUser.email };
         axios
-          .post('http://localhost:5000/jwt', user, { withCredentials: true }) // Adjust the URL as necessary
+          .post('https://lost-and-found-server-ecru.vercel.app/jwt', user, { withCredentials: true }) // Adjust the URL as necessary
           .then((res) => {
             console.log('login token', res.data);
             setLoading(false); // Stop loading once user info is fetched
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
       } else {
         // If no user, logout from backend
         axios
-          .post('http://localhost:5000/logout', {}, { withCredentials: true }) // Adjust the URL as necessary
+          .post('https://lost-and-found-server-ecru.vercel.app/logout', {}, { withCredentials: true }) // Adjust the URL as necessary
           .then((res) => {
             console.log('logout', res.data);
             setLoading(false); // Stop loading once logged out

@@ -16,7 +16,7 @@ const LatestLostAndFound = () => {
       setIsLoading(true); // Start loading state
 
       try {
-        const response = await fetch("http://localhost:5000/lost"); // Correct URL for your server
+        const response = await fetch("https://lost-and-found-server-ecru.vercel.app/lost"); // Correct URL for your server
         if (!response.ok) {
           throw new Error("Failed to fetch lost items");
         }

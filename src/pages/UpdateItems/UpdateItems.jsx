@@ -23,7 +23,7 @@ const UpdateItems = () => {
   // Fetch the existing item details from the server
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:5000/lost/${id}`)
+      fetch(`https://lost-and-found-server-ecru.vercel.app/lost/${id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data) {
@@ -47,7 +47,7 @@ const UpdateItems = () => {
     e.preventDefault();
 
     // Send updated item data to the server
-    fetch(`http://localhost:5000/lost/${id}`, {
+    fetch(`https://lost-and-found-server-ecru.vercel.app/lost/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),

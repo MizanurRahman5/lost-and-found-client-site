@@ -18,7 +18,7 @@ const AllRecoveries = () => {
         try {
           // Simulate a 1-second loading delay
           setTimeout(async () => {
-            const response = await fetch(`http://localhost:5000/recover/${user.email}`);
+            const response = await fetch(`https://lost-and-found-server-ecru.vercel.app/recover/${user.email}`);
             const data = await response.json();
 
             if (response.ok) {

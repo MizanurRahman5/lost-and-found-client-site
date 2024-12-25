@@ -56,7 +56,7 @@ const AddPost = () => {
 
     console.log("New Campaign Data:", formData);
 
-    fetch('http://localhost:5000/lost', {
+    fetch('https://lost-and-found-server-ecru.vercel.app/lost', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

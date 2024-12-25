@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const Blog = () => {
   const posts = [
@@ -71,9 +72,12 @@ const Blog = () => {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8">
         {posts.map((post) => (
-          <div
+          <motion.div
             key={post.id}
             className="bg-white border rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out"
+            initial={{ x: "-100vw", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
             <img
               src={post.imgSrc}
@@ -86,7 +90,7 @@ const Blog = () => {
               <p className="text-gray-600 mt-4">{post.excerpt}</p>
               <button className="mt-6 text-orange-600 hover:underline">Read more</button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

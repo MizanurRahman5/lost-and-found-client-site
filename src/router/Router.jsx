@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       {
         path:'allItems',
         element:<LostAndFound/>,
-        loader:() =>fetch('http://localhost:5000/lost')
+        loader:() =>fetch('https://lost-and-found-server-ecru.vercel.app/lost')
       },
       {
         path:'myItems',
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: async ({ params }) => {
-          const response = await fetch(`http://localhost:5000/see-details/${params.id}`);
+          const response = await fetch(`https://lost-and-found-server-ecru.vercel.app/see-details/${params.id}`);
           return response.json();
         },
       },

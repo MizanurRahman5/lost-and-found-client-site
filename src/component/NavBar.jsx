@@ -21,7 +21,7 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+      await axios.post("https://lost-and-found-server-ecru.vercel.app/logout", {}, { withCredentials: true });
       setUser(null);
 
       // Show SweetAlert on logout
